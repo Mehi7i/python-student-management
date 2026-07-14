@@ -1,4 +1,19 @@
 students=[]
+import json
+import os
+def save_students():
+    print(os.getcwd())
+    with open("students.json", "w") as file:
+        json.dump(students,file)
+
+def load_students():
+    global students
+    try:
+        with open("students.json","r") as file:
+            students=json.load(file)
+    except FileNotFoundError:
+        students=[]
+
 def add_student():
 
     name=input("enter  name:")
@@ -10,6 +25,7 @@ def add_student():
     "score":score
      }
     students.append(student)
+    save_students()
     print("Student Added Successfully")
 
 # ----------------------------------------
@@ -47,16 +63,19 @@ def edit_student():
                 new_age=int(input("new age?"))
                 student["age"]=new_age
                 print("saved")
+                save_students()
                 break
             elif vorudy==2:
                 new_score=float(input("new score?"))
                 student["score"]=new_score
+                save_students()
                 print("saved")
                 break
             elif vorudy==3:
                 new_name=input("new name?")
                 student["name"]=new_name
                 print("saved")
+                save_students()    
             else:
                 print("wrong input")
     if not found:
@@ -70,6 +89,7 @@ def del_student():
         if entekhab==student["name"]:
             found= True
             students.remove(student)
+            save_students()
             print("saved")
             break
     if not found:
@@ -77,6 +97,7 @@ def del_student():
 
 
 # -------------------------------------------
+load_students()
 while True:
     print("1. Add Student")
     print("2. Show Students")
