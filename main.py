@@ -15,21 +15,9 @@ def load_students():
         students=[]
 # ----------------------------------------------------
 def add_student():
-    try:
-       
         name=input("enter  name:")
-        while True:
-            try:
-                age=int(input("enter  age:"))
-                break
-            except ValueError:
-                  print("incorrect input")
-        while True:          
-            try:
-                score=float(input("enter  score:"))
-                break
-            except ValueError:
-                print("incorrect input")
+        age=get_valid_int("Enter Age:")
+        score=get_valid_float("enter  score:")
         student={
         "id":get_next_id(),
         "name":name,
@@ -39,9 +27,6 @@ def add_student():
         students.append(student)
         save_students()
         print("Student Added Successfully")
-    except ValueError:
-         print("incorrect input")
-         return
 # ----------------------------------------
 def show_student():
      if not students:
@@ -54,16 +39,12 @@ def show_student():
             print(f"Age  : {student['age']}")
             print(f"Score: {student['score']}")
             print("-------------------")
-
 # ---------------------------------------
 def search_student():
-    try:
-        vorudi = int(input("what ID:"))
-
+        student_id=get_valid_int("Enter student ID: ")
         found = False
-
         for student in students:
-            if vorudi == student["id"]:
+            if student_id == student["id"]:
                 found = True
                 print(
                     f"Name: {student['name']}, "
@@ -72,69 +53,35 @@ def search_student():
                     f"ID: {student['id']}"
                 )
                 break
-
         if not found:
             print("not found")
-
-    except ValueError:
-        print("incorrect input")      
 # ----------------------------------------
 def edit_student():
-    try:
-        while True:
-            try:
-                vorudi=int(input(f"what id:"))
-                break
-            except ValueError:
-                print("incorrect input") 
+        student_id=get_valid_int("what id:")
         found=False
         for student in students:
-            if vorudi==student["id"]:
+            if student_id==student["id"]:
                 found=True
-                while True:
-                    try:
-                        vorudy=int(input(f"whch for change: 1-edit age:{student['age']}, 2-edit score:{student['score']}:, 3-edit name:{student['name']}"))
-                        if vorudy in [1, 2, 3]:
-                            break
-                        else:
-                            print("wrong input")
-                    except ValueError:
-                        print("incorrect input")
-                if vorudy==1:
-                    while True:
-                        try:
-                            new_age=int(input("new age?"))
-                            student["age"]=new_age
-                            print("saved")
-                            break
-                        except ValueError:
-                            print("incorrect input")
-                    save_students()
-                    break
-                elif vorudy==2:
-                    while True:
-                        try:
-                            new_score=float(input("new score?"))
-                            student["score"]=new_score
-                            save_students()    
-                            print("saved")
-                            break
-                        except ValueError:
-                            print("incorrect input")
-                elif vorudy==3:
+                choise=get_edit_choice()
+                if choise==1:
+                        new_age=get_valid_int("new age?")
+                        student["age"]=new_age
+                        break
+                elif choise==2:
+                        new_score=get_valid_float("new score?")
+                        student["score"]=new_score
+                        break
+                elif choise==3:
                     new_name=input("new name?")
                     student["name"]=new_name
-                    print("saved")
-                    save_students()
-                    break                     
+                    break 
+                print("saved")
+                save_students()                    
         if not found:
             print("not dound your student")
-    except ValueError:
-        print("incorrect input")
 # -------------------------------------------
 def del_student():
-    try:
-        student_id=int(input("which student?"))
+        student_id=get_valid_int("Enter student ID: ")
         found=False
         for student in students:
             if student_id==student["id"]:
@@ -145,8 +92,6 @@ def del_student():
                 break
         if not found:
             print("not found")
-    except ValueError:
-            print("incorrect input")
 # ------------------------------------------------------
 def get_next_id():
     if not students:
@@ -154,10 +99,31 @@ def get_next_id():
     else:
         return students[-1]["id"] + 1
       
+# ------------------------------------
+def get_valid_int(message):
+    while True:
+        try:
+            return int(input(message))
+        except ValueError:
+            print("incorrect input")
 
+def get_valid_float(message):
+    while True:
+        try:
+            return float(input(message))
+        except ValueError:
+            print("incorrect input")
+# --------------------------------------------------
+def get_edit_choice():
+    while True:
+        choice = get_valid_int(
+            "Which for change: 1-age, 2-score, 3-name: "
+        )
 
+        if choice in [1, 2, 3]:
+            return choice
 
-
+        print("wrong input")
 # -------------------------------------------
 load_students()
 while True:
@@ -190,7 +156,3 @@ while True:
          break
     else:
         print("Invalid Option")
-
-
-
-
